@@ -1,0 +1,15 @@
+{
+  "name": "@a2ui/sample-cloudrun-client",
+  "private": true,
+  "workspaces": [
+    "shell"
+  ],
+  "scripts": {
+    "serve:shell": "cd shell && npm run dev",
+    "serve:agent:restaurant": "cd ../agent && uv run .",
+    "demo:restaurant": "npm install && concurrently -k -n \"SHELL,REST\" -c \"magenta,blue\" \"npm run serve:shell\" \"npm run serve:agent:restaurant\""
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.1"
+  }
+}
