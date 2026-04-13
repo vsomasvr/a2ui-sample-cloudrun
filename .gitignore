@@ -28,3 +28,16 @@ samples/client/angular/projects/mcp_calculator/public/mcp_apps_inner_iframe/
 ## Generated files for a2ui-in-mcpapps
 samples/agent/mcp/a2ui-in-mcpapps/server/apps/dist
 samples/agent/mcp/a2ui-in-mcpapps/server/apps/public
+
+# Terraform temporary and state files
+.terraform/
+*.tfstate
+*.tfstate.*
+crash.log
+crash.*.log
+*.tfvars
+*.tfvars.json
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
