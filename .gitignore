@@ -3,6 +3,7 @@ node_modules
 .wireit
 dist
 .env
+.env.production
 .idx
 .vscode
 .idea
