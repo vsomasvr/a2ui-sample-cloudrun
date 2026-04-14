@@ -30,3 +30,16 @@ module "agent_cloudrun" {
   service_name  = "a2ui-agent-prod"
   use_vertex_ai = var.use_vertex_ai
 }
+
+module "client_cloudrun" {
+  source = "../../modules/client-cloudrun"
+
+  project_id         = var.project_id
+  region             = var.region
+  image_url          = var.client_image_url
+  service_name       = "a2ui-client-prod"
+  agent_url          = module.agent_cloudrun.service_url
+  agent_service_name = module.agent_cloudrun.service_name
+
+  depends_on = [module.agent_cloudrun]
+}

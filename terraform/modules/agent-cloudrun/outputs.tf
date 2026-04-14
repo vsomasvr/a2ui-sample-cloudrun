@@ -7,3 +7,7 @@ output "service_account_email" {
   value       = google_service_account.agent_sa.email
   description = "The email of the dedicated service account"
 }
+output "service_name" {
+  value       = google_cloud_run_v2_service.agent_service.name
+  description = "The name of the agent service"
+}

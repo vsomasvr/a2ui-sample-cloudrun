@@ -22,6 +22,13 @@ export default defineConfig({
   server: {
     port: 5003,
     strictPort: true,
+    proxy: {
+      '/api': {
+        target: process.env.AGENT_URL || 'http://localhost:10002',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api/, '')
+      }
+    }
   },
   optimizeDeps: {
     include: ['@a2ui/react', 'react', 'react-dom'],

@@ -24,3 +24,8 @@ variable "registry_repo_name" {
   type        = string
   description = "Name of the Artifact Registry repository prefix parsed from tfvars"
 }
+
+variable "client_image_url" {
+  type        = string
+  description = "Container image URL for the React BFF client"
+}
