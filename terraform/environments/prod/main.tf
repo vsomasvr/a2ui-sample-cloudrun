@@ -3,12 +3,21 @@ terraform {
   required_providers {
     google = {
       source  = "hashicorp/google"
-      version = "~> 5.0"
+      version = "~> 6.0"
+    }
+    google-beta = {
+      source  = "hashicorp/google-beta"
+      version = "~> 6.0"
     }
   }
 }
 
 provider "google" {
+  project = var.project_id
+  region  = var.region
+}
+
+provider "google-beta" {
   project = var.project_id
   region  = var.region
 }
@@ -41,6 +50,7 @@ module "client_cloudrun" {
   service_name       = "a2ui-client-prod"
   agent_url          = module.agent_cloudrun.service_url
   agent_service_name = module.agent_cloudrun.service_name
+  iap_authorized_users = var.iap_authorized_users
 
   depends_on = [module.agent_cloudrun]
 }

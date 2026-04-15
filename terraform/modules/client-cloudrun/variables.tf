@@ -21,3 +21,9 @@ variable "agent_service_name" {
   type        = string
   description = "The name of the agent Cloud Run service (used for IAM bindings)"
 }
+
+variable "iap_authorized_users" {
+  type        = list(string)
+  description = "List of principals (e.g., 'user:dev@example.com') given access to the Cloud Run service via IAP"
+  default     = []
+}

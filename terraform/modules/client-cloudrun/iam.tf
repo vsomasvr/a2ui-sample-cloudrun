@@ -21,3 +21,12 @@ resource "google_cloud_run_service_iam_member" "public_client_invoker" {
   role     = "roles/run.invoker"
   member   = "allUsers"
 }
+
+# Ensure the provided users are given access via Identity-Aware Proxy to the exact service resource
+resource "google_iap_web_cloud_run_service_iam_binding" "iap_access" {
+  project = var.project_id
+  location = var.region
+  cloud_run_service_name = google_cloud_run_v2_service.client_service.name
+  role = "roles/iap.httpsResourceAccessor"
+  members = var.iap_authorized_users
+}

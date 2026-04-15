@@ -6,12 +6,12 @@ resource "google_cloud_run_v2_service" "agent_service" {
   name     = var.service_name
   location = var.region
   project  = var.project_id
-  
+
   template {
     service_account = google_service_account.agent_sa.email
     containers {
       image = var.image_url
-      
+
       resources {
         limits = {
           cpu    = "1000m"

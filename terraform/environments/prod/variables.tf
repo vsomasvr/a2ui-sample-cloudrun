@@ -35,3 +35,9 @@ variable "agent_base_url" {
   description = "The public-facing URL of the agent Cloud Run service (for the agent card). Set after first deploy."
   default     = ""
 }
+
+variable "iap_authorized_users" {
+  type        = list(string)
+  description = "List of IAP authorized users"
+  default     = []
+}

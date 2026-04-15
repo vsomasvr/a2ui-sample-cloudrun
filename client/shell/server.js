@@ -36,7 +36,7 @@ let targetAudience = AGENT_URL + "/*"; // Target audience is usually the base UR
 // Proxy all /api traffic to the backend agent securely
 const authMiddleware = async (req, res, next) => {
   // 1. Only run if targeting Cloud Run and no token is present
-  if (AGENT_URL.includes('.run.app') && !req.headers.authorization) {
+  if (AGENT_URL.includes('.run.app')) {
     try {
       console.log(`[1. Auth-Start] Request to: ${req.url}`);
       
@@ -65,11 +65,14 @@ app.use('/api', authMiddleware, createProxyMiddleware({
   pathRewrite: { '^/api': '' },
   on: {
     proxyReq: (proxyReq, req, res) => {
-      // Final log and force-injection
       console.log(`[3. Proxy-Fire] (v3) Sending to: ${AGENT_URL}${proxyReq.path}`);
       
       if (req.headers['authorization']) {
-        proxyReq.setHeader('Authorization', req.headers['authorization']);
+        proxyReq.setHeader('X-Serverless-Authorization', req.headers['authorization']);
+
+        // Remove the standard auth header to prevent "header bloat" and log confusion 
+        proxyReq.removeHeader('authorization');
+        console.log(`[3a. Proxy-Req] Header set: X-Serverless-Authorization`);
       }
     },
     proxyRes: (proxyRes, req, res) => {
