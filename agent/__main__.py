@@ -48,7 +48,9 @@ def main(host, port):
             " is not TRUE."
         )
 
-    base_url = f"http://{host}:{port}"
+    # Use BASE_URL env var for the agent card's public URL (set via Terraform on Cloud Run).
+    # Falls back to the local bind address for development.
+    base_url = os.getenv("BASE_URL", f"http://{host}:{port}")
 
     agent = RestaurantAgent(base_url=base_url)
 
@@ -67,7 +69,7 @@ def main(host, port):
 
     app.add_middleware(
         CORSMiddleware,
-        allow_origin_regex=r"http://localhost:\d+",
+        allow_origin_regex=r"(http://localhost:\d+|https://.*\.run\.app)",
         allow_credentials=True,
         allow_methods=["*"],
         allow_headers=["*"],

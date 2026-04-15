@@ -29,3 +29,9 @@ variable "client_image_url" {
   type        = string
   description = "Container image URL for the React BFF client"
 }
+
+variable "agent_base_url" {
+  type        = string
+  description = "The public-facing URL of the agent Cloud Run service (for the agent card). Set after first deploy."
+  default     = ""
+}

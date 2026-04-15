@@ -4,7 +4,8 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm install
 COPY . .
-# The build explicitly depends on .env.production routing to /api
+# Bake the API routing fallback for the proxy into the React build statically
+ENV VITE_AGENT_SERVER_URL=/api
 RUN npm run build
 
 # Stage 2: Serve via Node Express (BFF)

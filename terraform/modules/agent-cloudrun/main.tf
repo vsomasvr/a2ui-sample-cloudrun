@@ -1,3 +1,7 @@
+data "google_project" "project" {
+  project_id = var.project_id
+}
+
 resource "google_cloud_run_v2_service" "agent_service" {
   name     = var.service_name
   location = var.region
@@ -26,6 +30,10 @@ resource "google_cloud_run_v2_service" "agent_service" {
       env {
         name  = "GOOGLE_GENAI_USE_VERTEXAI"
         value = var.use_vertex_ai ? "TRUE" : "FALSE"
+      }
+      env {
+        name  = "BASE_URL"
+        value = var.base_url != "" ? var.base_url : "/api"
       }
     }
   }

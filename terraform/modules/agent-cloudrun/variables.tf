@@ -30,3 +30,9 @@ variable "use_vertex_ai" {
   description = "Whether the agent should use Vertex AI (sets GOOGLE_GENAI_USE_VERTEXAI)"
   default     = true
 }
+
+variable "base_url" {
+  type        = string
+  description = "The public-facing URL for the agent card. Set to the Cloud Run service URL after first deploy."
+  default     = ""
+}

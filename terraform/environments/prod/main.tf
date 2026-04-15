@@ -29,6 +29,7 @@ module "agent_cloudrun" {
   image_url     = var.agent_image_url
   service_name  = "a2ui-agent-prod"
   use_vertex_ai = var.use_vertex_ai
+  base_url      = var.agent_base_url
 }
 
 module "client_cloudrun" {

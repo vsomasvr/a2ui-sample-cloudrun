@@ -65,6 +65,10 @@ terraform apply
 *(Confirm with `yes` when prompted)*
 
 ---
+For redeployment
+gcloud run services update a2ui-client-prod --image us-central1-docker.pkg.dev/vsoma-demos/a2ui-sample/a2ui-restaurant-agent:latest --region us-central1 --project vsoma-demos
+
+---
 
 ### Verifying Deployment & Testing
 
@@ -109,3 +113,79 @@ curl -X POST "${AGENT_URL}/" \
     }
   }'
 ```
+
+## Client Deployment & Testing
+
+This section covers how to build, deploy, and locally test the Frontend Client (BFF and Web UI).
+
+### 1. Build and Publish the Client Image
+
+Navigate to the client shell directory and submit the build:
+
+```bash
+cd client/shell
+gcloud builds submit --config cloudbuild.yaml .
+```
+
+### 2. Deploy the Client
+
+Apply the Terraform configuration to provision the client Cloud Run service:
+
+```bash
+cd terraform/environments/prod
+terraform init
+terraform apply
+```
+
+For redeployment
+gcloud run services update a2ui-client-prod --image us-central1-docker.pkg.dev/vsoma-demos/a2ui-sample/a2ui-restaurant-client:latest --region us-central1 --project vsoma-demos
+
+---
+
+### 3. Local Testing
+
+Before deploying the final version or to debug locally, you can run the client BFF proxy using the impersonated service account credentials constraint.
+
+1. Authenticate with the Client Service Account:
+   ```bash
+   gcloud auth application-default login --impersonate-service-account=a2ui-client-prod-sa@vsoma-demos.iam.gserviceaccount.com
+   ```
+
+2. Start the local server:
+   ```bash
+   cd client/shell
+   export AGENT_URL="<YOUR_DEPLOYED_AGENT_URL>"
+   npm run start
+   ```
+
+3. Test the local proxy via `curl`:
+   ```bash
+   curl -X POST "http://localhost:8080/api/" \
+     -H "Content-Type: application/json" \
+     -d '{
+       "jsonrpc": "2.0",
+       "method": "message/send",
+       "id": 1,
+       "params": {
+         "message": {
+           "messageId": "123456",
+           "role": "user",
+           "kind": "message",
+           "parts": [
+             {"text": "Find me the top 3 pizza places in New York"}
+           ]
+         }
+       }
+     }'
+   ```
+
+### 4. Final Verification
+
+Finally, if you made changes locally, ensure everything is deployed to the remote environments:
+
+```bash
+cd terraform/environments/prod
+terraform apply
+```
+
+Test the fully deployed Client via its remote HTTPS Cloud Run endpoint.
