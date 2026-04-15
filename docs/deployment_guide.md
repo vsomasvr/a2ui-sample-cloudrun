@@ -189,3 +189,16 @@ terraform apply
 ```
 
 Test the fully deployed Client via its remote HTTPS Cloud Run endpoint.
+
+
+##
+1. The "Native" 403 Explained
+When you use Native IAP, Google manages the "front door" for you directly at the .run.app endpoint.
+
+If you have allUsers invoker: Anyone can hit the URL. IAP sees the request, asks for login, and since the service allows anyone to invoke it, it works.
+
+If you remove allUsers: Cloud Run now checks IAM before it even lets IAP finish the job. If you (the person in the browser) don't have the roles/run.invoker role, Cloud Run stops you with a 403 before IAP can "represent" you.
+
+Scenario                | Can you use the Web UI? | Can you bypass IAP via CLI? | Security Posture
+User has Invoker + IAP  | Yes                     | Yes (using gcloud tokens) | Lower (Redundant keys)
+User has IAP Only       | Yes                     | No (403 Forbidden)        | Higher (Zero Trust)

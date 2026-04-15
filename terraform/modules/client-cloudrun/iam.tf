@@ -1,3 +1,7 @@
+data "google_project" "project" {
+  project_id = var.project_id
+}
+
 resource "google_service_account" "client_sa" {
   account_id   = "${var.service_name}-sa"
   display_name = "Service Account for A2UI React Client"
@@ -19,7 +23,7 @@ resource "google_cloud_run_service_iam_member" "public_client_invoker" {
   project  = var.project_id
   service  = google_cloud_run_v2_service.client_service.name
   role     = "roles/run.invoker"
-  member   = "allUsers"
+  member   = "serviceAccount:service-${data.google_project.project.number}@gcp-sa-iap.iam.gserviceaccount.com"
 }
 
 # Ensure the provided users are given access via Identity-Aware Proxy to the exact service resource
